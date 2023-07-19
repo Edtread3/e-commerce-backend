@@ -1,12 +1,12 @@
 const router = require('express').Router();
-const { models } = require('../../models');
+const { Product, Category, Tag, ProductTag } = require('../../models');
 
 // The `/api/tags` endpoint
 
 router.get('/', async (req, res) => {
   try{
-    const tags = await models.Tag.findAll({
-      include: [{ model: models.Product}],
+    const tags = await Tag.findAll({
+      include: [{ model: Product}],
     });
     res.status(200).json(tags);
   } catch (error) {
@@ -16,8 +16,8 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try{
-    const tag = await models.Tag.findByPk(req.params.id, {
-      include: [{ model: models.Product}],
+    const tag = await Tag.findByPk(req.params.id, {
+      include: [{ model: Product}],
     });
     if (!tag) {
       res.status(404).json({message: "Sorry Tag not found"});
@@ -32,7 +32,7 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try{
-    const tag = await models.Tag.create(req.body);
+    const tag = await Tag.create(req.body);
     res.status(201).json(tag); 
    } catch (error) {
     res.status(500).json(error);
@@ -42,7 +42,7 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
   try{
-    const tag = await models.Tag.findByPk(req.params.id);
+    const tag = await Tag.findByPk(req.params.id);
     if(!tag) {
       res.status(404).json({ message: "Sorry Tag not found"});
       return;
@@ -58,7 +58,7 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
   try {
-    const tag = await models.Tag.findByPk(req.params.id);
+    const tag = await Tag.findByPk(req.params.id);
     if (!tag) {
       res.status(404).json({message: "Sorry Tag not found"});
       return;

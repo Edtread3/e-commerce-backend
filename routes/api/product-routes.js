@@ -7,10 +7,10 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 // get all products
 router.get('/',  async (req, res) => {
   try {
-    const products = await models.Product.findAll({
+    const products = await Product.findAll({
       include: [
-        {model: model.Category},
-        {model: models.Tag, through: models.ProductTag},
+        {model: Category},
+        {model: Tag, through: ProductTag},
       ],
     });
     res.status(200).json(products);
@@ -22,10 +22,10 @@ router.get('/',  async (req, res) => {
 // get one product
 router.get('/:id', async (req, res) => {
   try {
-    const product = await models.Product.findByPk(req,params.id, {
+    const product = await Product.findByPk(req,params.id, {
       include: [
-        {model: models.Category},
-        {model: models.Tag, through: models.ProductTag},
+        {model: Category},
+        {model: Tag, through: ProductTag},
       ],
     });
     if (!product) {
@@ -83,14 +83,14 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
   // update product data
-  await models.Product.update(req.body, {
+  await Product.update(req.body, {
     where: {
       id: req.params.id,
     },
   });
     
       // find all associated tags from ProductTag
-      const productTags = await models.ProductTag.findAll({
+      const productTags = await ProductTag.findAll({
         where: { product_id: req.params.id },
       });
     
@@ -126,7 +126,7 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
   try{
-    const product = await models.Product.destroy({
+    const product = await Product.destroy({
       where: {
         id: req.params.id,
       },
